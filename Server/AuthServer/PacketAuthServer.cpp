@@ -37,7 +37,7 @@ void CClientSession::SendCharLogInReq(CNtlPacket * pPacket, CAuthServer * app)
 	res->accountId = app->db->getInt("@acc_id");
 
 	res->byServerInfoCount = 1;
-	strcpy_s(res->aServerInfo[0].szCharacterServerIP, NTL_MAX_LENGTH_OF_IP, "127.0.0.1");
+	strcpy_s(res->aServerInfo[0].szCharacterServerIP, NTL_MAX_LENGTH_OF_IP, IP_SERVER_ALL);
 	res->aServerInfo[0].wCharacterServerPortForClient = 20300;
 	res->aServerInfo[0].dwLoad = 0;
 	res->lastServerFarmId = 0;

@@ -324,7 +324,7 @@ void CClientSession::SendCharSelectReq(CNtlPacket * pPacket)
 	res->wResultCode = CHARACTER_SUCCESS;
 	res->charId = req->charId; 
 	strcpy_s((char*)res->abyAuthKey, NTL_MAX_SIZE_AUTH_KEY, "Dbo");
-	strcpy_s(res->szGameServerIP, sizeof(res->szGameServerIP), "127.0.0.1");
+	strcpy_s(res->szGameServerIP, sizeof(res->szGameServerIP), IP_SERVER_ALL);
 	res->wGameServerPortForClient = 30001;
 
 	packet.SetPacketLen( sizeof(sCU_CHARACTER_SELECT_RES) );

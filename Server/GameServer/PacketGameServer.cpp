@@ -32,7 +32,7 @@ void CClientSession::SendGameEnterReq(CNtlPacket * pPacket, CGameServer * app)
 
 	res->wOpCode = GU_GAME_ENTER_RES;
 	res->wResultCode = GAME_SUCCESS;
-	strcpy_s(res->achCommunityServerIP, sizeof(res->achCommunityServerIP), "127.0.0.1");
+	strcpy_s(res->achCommunityServerIP, sizeof(res->achCommunityServerIP), IP_SERVER_ALL);
 	res->wCommunityServerPort = 20400;
 
 	packet.SetPacketLen( sizeof(sGU_GAME_ENTER_RES) );
@@ -906,7 +906,7 @@ void CClientSession::SendCharExitReq(CNtlPacket * pPacket, CGameServer * app)
 	res->wResultCode = GAME_SUCCESS;
 	strcpy_s((char*)res->achAuthKey, NTL_MAX_SIZE_AUTH_KEY, "Dbo");
 	res->byServerInfoCount = 1;
-	strcpy_s(res->aServerInfo[0].szCharacterServerIP, NTL_MAX_LENGTH_OF_IP, "127.0.0.1");
+	strcpy_s(res->aServerInfo[0].szCharacterServerIP, NTL_MAX_LENGTH_OF_IP, IP_SERVER_ALL);
 	res->aServerInfo[0].wCharacterServerPortForClient = 20300;
 	res->aServerInfo[0].dwLoad = 0;
 
