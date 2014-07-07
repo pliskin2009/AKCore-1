@@ -183,6 +183,7 @@ CREATE TABLE `characters` (
   `CurEP` int(10) DEFAULT '100',
   `CurRP` int(10) DEFAULT '100',
   `OnlineID` int(5) DEFAULT '0',
+  `MailIsAway` int(10) DEFAULT '0',
   PRIMARY KEY (`CharID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
