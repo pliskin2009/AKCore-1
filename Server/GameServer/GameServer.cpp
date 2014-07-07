@@ -1616,7 +1616,7 @@ int GameServerMain(int argc, _TCHAR* argv[])
 	NtlSetPrintFlag( PRINT_APP | PRINT_SYSTEM );
 
 
-	rc = app.Create(argc, argv, ".\\GameServer.ini");
+	rc = app.Create(argc, argv, ".\\Server.ini");
 	if( NTL_SUCCESS != rc )
 	{
 		NTL_PRINT(PRINT_APP, "Server Application Create Fail %d(%s)", rc, NtlGetErrorMessage(rc) );

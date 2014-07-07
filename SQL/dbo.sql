@@ -18,7 +18,7 @@ CREATE TABLE `accounts` (
   `acc_status` enum('block','active') DEFAULT 'active',
   `email` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`AccountID`)
-) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for bannword
@@ -27,7 +27,7 @@ CREATE TABLE `bannword` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `bannword` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for bind
@@ -38,7 +38,7 @@ CREATE TABLE `bind` (
   `WorldID` tinyint(3) NOT NULL,
   `BindObjectTblIdx` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for characters
@@ -184,7 +184,7 @@ CREATE TABLE `characters` (
   `CurRP` int(10) DEFAULT '100',
   `OnlineID` int(5) DEFAULT '0',
   PRIMARY KEY (`CharID`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for guild_members
@@ -197,7 +197,7 @@ CREATE TABLE `guild_members` (
   `is_guildmaster` tinyint(1) DEFAULT '0',
   `is_secondguildmaster` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for guilds
@@ -213,7 +213,7 @@ CREATE TABLE `guilds` (
   `GuildPointEver` int(10) DEFAULT '0',
   `GuildDisbandTime` datetime DEFAULT NULL,
   PRIMARY KEY (`GuildID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for items
@@ -231,7 +231,7 @@ CREATE TABLE `items` (
   PRIMARY KEY (`id`),
   KEY `owner_id_idx` (`owner_id`),
   KEY `item_vnum_index` (`tblidx`)
-) ENGINE=MyISAM AUTO_INCREMENT=1400282 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1400000 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for mail
@@ -255,7 +255,7 @@ CREATE TABLE `mail` (
   `bIsLock` bit(1) DEFAULT b'0',
   `bIsRead` bit(1) DEFAULT b'0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for portals
@@ -287,7 +287,7 @@ CREATE TABLE `skills` (
   `TimeRemaining` int(15) unsigned NOT NULL,
   `Exp` int(5) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Procedure structure for AuthLogin
@@ -468,24 +468,24 @@ BEGIN
 
 					IF (byRace = 0) THEN
 						INSERT INTO items (`owner_id`, `tblidx`, `place`, `pos`, `count`, `rank`, `durability`)
-						VALUES(char_id,  14001, 1, 0, 1, 1, 100),
-							    (char_id,  14002, 1, 1, 1, 1, 100),
-						    	    (char_id,  14003, 1, 2, 1, 1, 100);
+						VALUES(char_id,  14001, 7, 2, 1, 1, 100),
+							    (char_id,  14002, 7, 3, 1, 1, 100),
+						    	    (char_id,  14003, 7, 4, 1, 1, 100);
 								UPDATE characters SET CurLocX = 4467, CurLocY = -40, CurLocZ = 3951 WHERE CharID = char_id LIMIT 1;
 					END IF;
 
 					IF (byRace = 1) THEN
 						INSERT INTO items (`owner_id`, `tblidx`, `place`, `pos`, `count`, `rank`, `durability`)
-						VALUES(char_id,  23001, 1, 0, 1, 1, 100),
-							    (char_id,  23002, 1, 1, 1, 1, 100),
-						  	  (char_id,  23003, 1, 2, 1, 1, 100);
+						VALUES(char_id,  23001, 7, 2, 1, 1, 100),
+							    (char_id,  23002, 7, 3, 1, 1, 100),
+						  	  (char_id,  23003, 7, 2, 4, 1, 100);
 							UPDATE characters SET CurLocX = 3131, CurLocY = -32, CurLocZ = -2755 WHERE CharID = char_id LIMIT 1;
 					END IF;
 						IF (byRace = 2) THEN
 						INSERT INTO items (`owner_id`, `tblidx`, `place`, `pos`, `count`, `rank`, `durability`)
-						VALUES(char_id,  24001, 1, 0, 1, 1, 100),
-							    (char_id,  24002, 1, 1, 1, 1, 100),
-						    	    (char_id,  24003, 1, 2, 1, 1, 100);
+						VALUES(char_id,  24001, 7, 2, 1, 1, 100),
+							    (char_id,  24002, 7, 3, 1, 1, 100),
+						    	    (char_id,  24003, 4, 2, 1, 1, 100);
 							UPDATE characters SET CurLocX = 5775, CurLocY = -74, CurLocZ = -4032 WHERE CharID = char_id LIMIT 1;
 					END IF;
 
