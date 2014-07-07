@@ -2610,3 +2610,71 @@ void	CClientSession::SendScouterIndicatorReq(CNtlPacket * pPacket, CGameServer *
 		}
 	}
 }
+void	CClientSession::SendDragonBallCheckReq(CNtlPacket * pPacket, CGameServer * app) // THIS IS THE FIRST VERSION
+{
+	printf("--- UG_DRAGONBALL_CHECK_REQ --- \n");
+	sUG_DRAGONBALL_CHECK_REQ * req = (sUG_DRAGONBALL_CHECK_REQ *)pPacket->GetPacketData();
+	CNtlPacket packet(sizeof(sGU_DRAGONBALL_CHECK_RES));
+	sGU_DRAGONBALL_CHECK_RES * res = (sGU_DRAGONBALL_CHECK_RES *)packet.GetPacketData();
+
+	int dragonBall[7] = {9, 9, 9, 9, 9, 9, 9};// 7 because we need loop 0 - 6 because position start to 0 :)
+	int i = 0;
+	while (i <= 6)
+	{
+		app->db->prepare("SELECT * FROM items WHERE id = ?");
+		app->db->setInt(1, req->sData[i].hItem);
+		app->db->execute();
+		app->db->fetch();
+		dragonBall[i] = app->db->getInt("tblidx");
+		i++;
+	}
+	i = 0;
+	std::sort(dragonBall, dragonBall+6);
+	while (i <= 6)
+	{
+		if (req->sData[i].byPos == i && dragonBall[i] == (200001 + i));
+		else
+		{
+			res->hObject = req->hObject;
+			res->wResultCode = GAME_DRAGONBALL_NOT_FOUND;
+			res->wOpCode = GU_DRAGONBALL_CHECK_RES;
+			packet.SetPacketLen( sizeof(sGU_DRAGONBALL_CHECK_RES) );
+			g_pApp->Send( this->GetHandle() , &packet );
+			i = 0;
+			break;
+		}
+		i++;
+	}
+	if (i == 7)
+	{
+		res->hObject = req->hObject;
+		res->wResultCode = GAME_SUCCESS;
+		res->wOpCode = GU_DRAGONBALL_CHECK_RES;
+		packet.SetPacketLen( sizeof(sGU_DRAGONBALL_CHECK_RES) );
+		g_pApp->Send( this->GetHandle() , &packet );
+	}
+}
+
+void	CClientSession::SendDragonBallRewardReq(CNtlPacket * pPacket, CGameServer * app) // THIS IS THE FIRST VERSION
+{
+	printf("--- UG_DRAGONBALL_REWARD_REQ --- \n");
+	sUG_DRAGONBALL_REWARD_REQ * req = (sUG_DRAGONBALL_REWARD_REQ *)pPacket->GetPacketData();
+	CNtlPacket packet(sizeof(sGU_DRAGONBALL_REWARD_RES));
+	sGU_DRAGONBALL_REWARD_RES * res = (sGU_DRAGONBALL_REWARD_RES *)packet.GetPacketData();
+		
+	sDRAGONBALL_REWARD_TBLDAT* pDBtData = (sDRAGONBALL_REWARD_TBLDAT*)app->g_pTableContainer->GetDragonBallRewardTable()->FindData(req->rewardTblidx);
+	printf("Datacontainer = byBallType = %d, byRewardCategoryDepth = %d, rewardType = %d\ndwRewardZenny = %d, catergoryDialogue = %d\nCategoryName = %d, RewardDialog1 = %d, RewardDialog2 = %d\nrewardlinktblidx = %d, rewardname = %d, tdblidx = %d\n",
+		DBtData->byBallType, pDBtData->byRewardCategoryDepth, pDBtData->byRewardType, pDBtData->dwRewardZenny, pDBtData->rewardCategoryDialog,pDBtData->rewardCategoryName,
+		DBtData->rewardDialog1, pDBtData->rewardDialog2,pDBtData->rewardLinkTblidx, pDBtData->rewardName, pDBtData->tblidx);
+	printf("Reward have been found.\nReward id = %d.\n", req->rewardTblidx);
+				
+	res->hObject = req->hObject;
+	res->wOpCode = GU_DRAGONBALL_REWARD_RES;
+	res->wResultCode = GAME_SUCCESS;
+	packet.SetPacketLen( sizeof(sGU_DRAGONBALL_REWARD_RES) );
+	g_pApp->Send( this->GetHandle() , &packet );
+
+	CNtlPacket packet2(sizeof(sGU_DRAGONBALL_SCHEDULE_INFO));
+	sGU_DRAGONBALL_SCHEDULE_INFO * res2 = (sGU_DRAGONBALL_SCHEDULE_INFO *)packet2.GetPacketData();
+	res2->bIsAlive = true;
+}

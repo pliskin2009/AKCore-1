@@ -191,6 +191,9 @@ public:
 
 	// SCOUTER
 	void						SendScouterIndicatorReq(CNtlPacket * pPacket, CGameServer * app);
+	// DRAGON BALL
+	void						SendDragonBallCheckReq(CNtlPacket * pPacket, CGameServer * app);
+	void						SendDragonBallRewardReq(CNtlPacket * pPacket, CGameServer * app);
 	//
 	//Game Server functions
 	sGU_OBJECT_CREATE			characterspawnInfo;
