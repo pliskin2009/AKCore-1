@@ -484,9 +484,9 @@ BEGIN
 					END IF;
 						IF (byRace = 2) THEN
 						INSERT INTO items (`owner_id`, `tblidx`, `place`, `pos`, `count`, `rank`, `durability`)
-						VALUES(char_id,  24001, 7, 2, 1, 1, 100),
-							    (char_id,  24002, 7, 3, 1, 1, 100),
-						    	    (char_id,  24003, 4, 2, 1, 1, 100);
+						VALUES(char_id,  15001, 7, 2, 1, 1, 100),
+							    (char_id,  15002, 7, 3, 1, 1, 100),
+						    	    (char_id,  15003, 4, 2, 1, 1, 100);
 							UPDATE characters SET CurLocX = 5775, CurLocY = -74, CurLocZ = -4032 WHERE CharID = char_id LIMIT 1;
 					END IF;
 
