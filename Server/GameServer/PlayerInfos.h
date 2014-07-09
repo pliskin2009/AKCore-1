@@ -87,87 +87,12 @@ public:
 
 	void		Setlast_SpawnPos(sVECTOR3 id);
 	sVECTOR3	Getlast_SpawnPos();
-
-
-public:
-
-private:
-	std::string			Myname;
-	sVECTOR3			vCurLoc;
-	sVECTOR3			vCurDir;
-	int					charID;
-	int					AccountID;
-	int					WorldID;
-	int					WorldTableID;
-	BYTE				Level;
-	int					CurExp;
-	DWORD					Money;
-	std::string			GuildName;
-	int					BaseMaxLp;
-	int					LastMaxLp;
-	int					CurLp;
-	int					BaseMaxEp;
-	int					LastMaxEp;
-	int					CurEp;
-	int					BaseMaxRp;
-	int					LastMaxRp;
-	int					CurRp;
-	int					Reputation;
-	int					MudosaPoint;
-	int					SpPoint;
-	int					BaseStr;
-	int					LastStr;
-	int					BaseCon;
-	int					LastCon;
-	int					BaseFoc;
-	int					LastFoc;
-	int					BaseDex;
-	int					LastDex;
-	int					BaseSol;
-	int					LastSol;
-	int					BaseEng;
-	int					LastEng;
-
-	RwUInt32			mob_SpawnTime;
-	sVECTOR3			last_SpawnPos;
+	// PLAYER STAT CALCULE
+	void		calculeMyStat(CGameServer * app);
+	void		setZero();
 
 private:
 	MySQLConnWrapper			*db;
-	/*std::string			Myname;
-	sVECTOR3			vCurLoc;
-	sVECTOR3			vCurDir;
-	int					charID;
-	int					WorldID;
-	int					WorldTableID;
-	int					CurExp;
-	std::string			GuildName;
-	int					BaseMaxLp;
-	int					LastMaxLp;
-	int					CurLp;
-	int					BaseMaxEp;
-	int					LastMaxEp;
-	int					CurEp;
-	int					BaseMaxRp;
-	int					LastMaxRp;
-	int					CurRp;
-	int					Reputation;
-	int					MudosaPoint;
-	int					SpPoint;
-	int					BaseStr;
-	int					LastStr;
-	int					BaseCon;
-	int					LastCon;
-	int					BaseFoc;
-	int					LastFoc;
-	int					BaseDex;
-	int					LastDex;
-	int					BaseSol;
-	int					LastSol;
-	int					BaseEng;
-	int					LastEng;
-
-	RwUInt32			mob_SpawnTime;
-	sVECTOR3			last_SpawnPos;*/
 public:
 
 void		SaveMe();
@@ -209,7 +134,46 @@ void		SavePlayerData();
 	void		SetLastEnergyCriticalRate(int id){this->LastEnergyCriticalRate = id;};
 	void		SetLastRunSpeed(int id){this->LastRunSpeed = id;};
 
-private:	
+private:
+	std::string			Myname;
+	sVECTOR3			vCurLoc;
+	sVECTOR3			vCurDir;
+	int					charID;
+	int					AccountID;
+	int					WorldID;
+	int					WorldTableID;
+	BYTE				Level;
+	int					CurExp;
+	DWORD				Money;
+	std::string			GuildName;
+	int					BaseMaxLp;
+	int					LastMaxLp;
+	int					CurLp;
+	int					BaseMaxEp;
+	int					LastMaxEp;
+	int					CurEp;
+	int					BaseMaxRp;
+	int					LastMaxRp;
+	int					CurRp;
+	int					Reputation;
+	int					MudosaPoint;
+	int					SpPoint;
+	int					BaseStr;
+	int					LastStr;
+	int					BaseCon;
+	int					LastCon;
+	int					BaseFoc;
+	int					LastFoc;
+	int					BaseDex;
+	int					LastDex;
+	int					BaseSol;
+	int					LastSol;
+	int					BaseEng;
+	int					LastEng;
+
+	RwUInt32			mob_SpawnTime;
+	sVECTOR3			last_SpawnPos;
+
 	int					BasePhysicalOffence;
 	int					LastPhysicalOffence;
 	int					BasePhysicalDefence;
@@ -227,4 +191,86 @@ private:
 	int					LastPhysicalCriticalRate;
 	int					LastEnergyCriticalRate;
 	int					LastRunSpeed;
+	// TODO
+	int				BaseLpRegen;
+	int				LastLpRegen;
+	int				BaseLpSitdownRegen;
+	int				LastLpSitdownRegen;
+	int				BaseLpBattleRegen;
+	int				LastLpBattleRegen;
+
+	int				BaseEpRegen;
+	int				LastEpRegen;
+	int				BaseEpSitdownRegen;
+	int				LastEpSitdownRegen;
+	int				BaseEpBattleRegen;
+	int				LastEpBattleRegen;
+
+	int				BaseRpRegen;
+	int				LastRpRegen;
+	int				LastRpDimimutionRate;
+
+	int				BaseCurseSuccessRate;
+	int				LastCurseSuccessRate;
+	int				BaseCurseToleranceRate;
+	int				LastCurseToleranceRate;
+
+	int				BasePhysicalCriticalRate;
+	int				BaseEnergyCriticalRate;
+
+	int				BaseAttackSpeedRate;
+	int				LastAttackSpeedRate;
+	int				BaseAttackRange;
+	int				LastAttackRange;
+
+	int				CastingTimeChangePercent;
+	int				CoolTimeChangePercent;
+	int				KeepTimeChangePercent;
+	int				DotValueChangePercent;
+	int				DotTimeChangeAbsolute;
+	int				RequiredEpChangePercent;
+
+	int				HonestOffence;
+	int				HonestDefence;
+	int				StrangeOffence;
+	int				StrangeDefence;
+	int				WildOffence;
+	int				WildDefence;
+	int				EleganceOffence;
+	int				EleganceDefence;
+	int				FunnyOffence;
+	int				FunnyDefence;
+
+	int				ParalyzeToleranceRate;
+	int				TerrorToleranceRate;
+	int				ConfuseToleranceRate;
+	int				StoneToleranceRate;
+	int				CandyToleranceRate;
+
+	int				ParalyzeKeepTimeDown;
+	int				TerrorKeepTimeDown;
+	int				ConfuseKeepTimeDown;
+	int				StoneKeepTimeDown;
+	int				CandyKeepTimeDown;
+	int				BleedingKeepTimeDown;
+	int				PoisonKeepTimeDown;
+	int				StomachacheKeepTimeDown;
+
+	int				CriticalBlockSuccessRate;
+
+	int				GuardRate;
+
+	int				SkillDamageBlockModeSuccessRate;
+	int				CurseBlockModeSuccessRate;
+	int				KnockdownBlockModeSuccessRate;
+	int				HtbBlockModeSuccessRate;
+
+	int				SitDownLpRegenBonusRate;
+	int				SitDownEpRegenBonusRate;
+
+	int				PhysicalCriticalDamageBonusRate;
+	int				EnergyCriticalDamageBonusRate;
+
+	int				ItemUpgradeBonusRate;
+	int				ItemUpgradeBreakBonusRate;
 };

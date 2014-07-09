@@ -470,23 +470,23 @@ BEGIN
 					IF (byRace = 0) THEN
 						INSERT INTO items (`owner_id`, `tblidx`, `place`, `pos`, `count`, `rank`, `durability`)
 						VALUES(char_id,  14001, 7, 2, 1, 1, 100),
-							    (char_id,  14002, 7, 3, 1, 1, 100),
-						    	    (char_id,  14003, 7, 4, 1, 1, 100);
+							  (char_id,  14002, 7, 3, 1, 1, 100),
+							  (char_id,  14003, 7, 4, 1, 1, 100);
 								UPDATE characters SET CurLocX = 4467, CurLocY = -40, CurLocZ = 3951 WHERE CharID = char_id LIMIT 1;
 					END IF;
 
 					IF (byRace = 1) THEN
 						INSERT INTO items (`owner_id`, `tblidx`, `place`, `pos`, `count`, `rank`, `durability`)
 						VALUES(char_id,  23001, 7, 2, 1, 1, 100),
-							    (char_id,  23002, 7, 3, 1, 1, 100),
-						  	  (char_id,  23003, 7, 2, 4, 1, 100);
+							  (char_id,  23002, 7, 3, 1, 1, 100),
+						  	  (char_id,  23003, 7, 4, 1, 1, 100);
 							UPDATE characters SET CurLocX = 3131, CurLocY = -32, CurLocZ = -2755 WHERE CharID = char_id LIMIT 1;
 					END IF;
 						IF (byRace = 2) THEN
 						INSERT INTO items (`owner_id`, `tblidx`, `place`, `pos`, `count`, `rank`, `durability`)
 						VALUES(char_id,  15001, 7, 2, 1, 1, 100),
-							    (char_id,  15002, 7, 3, 1, 1, 100),
-						    	    (char_id,  15003, 4, 2, 1, 1, 100);
+							  (char_id,  15002, 7, 3, 1, 1, 100),
+						      (char_id,  15003, 4, 2, 1, 1, 100);
 							UPDATE characters SET CurLocX = 5775, CurLocY = -74, CurLocZ = -4032 WHERE CharID = char_id LIMIT 1;
 					END IF;
 

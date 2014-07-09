@@ -508,3 +508,46 @@ void		PlayerInfos::SaveMe()
 	//this->SaveItems();
 	//this->SaveSkills();
 }
+
+void		PlayerInfos::setZero()
+{
+}
+
+void		PlayerInfos::calculeMyStat(CGameServer * app)
+{
+	CNtlPacket packet4(sizeof(sGU_AVATAR_ATTRIBUTE_UPDATE));
+	sGU_AVATAR_ATTRIBUTE_UPDATE * res4 = (sGU_AVATAR_ATTRIBUTE_UPDATE *)packet4.GetPacketData();
+
+	app->db->prepare("SELECT * FROM items WHERE owner_ID = ? AND place=7 ORDER BY pos ASC");
+	app->db->setInt(1, this->GetCharID());
+	app->db->execute();
+	int loop = app->db->rowsCount();
+	CItemTable *itemTbl = app->g_pTableContainer->GetItemTable();
+	this->setZero(); //base stat
+	printf("Attribute list begin:\n");
+	while (app->db->fetch())
+	{
+		sITEM_TBLDAT* pItemData = (sITEM_TBLDAT*) itemTbl->FindData(app->db->getInt("tblidx"));
+		pItemData->wPhysical_Offence;
+		pItemData->wPhysical_Defence;
+		pItemData->wEnergy_Offence;
+		pItemData->wEnergy_Defence;
+		pItemData->wAttack_Speed_Rate;
+		pItemData->fAttack_Range_Bonus;
+		pItemData->dwPhysical_OffenceUpgrade;
+		pItemData->dwPhysical_DefenceUpgrade;
+		pItemData->dwEnergy_OffenceUpgrade;
+		pItemData->dwEnergy_DefenceUpgrade;
+		pItemData->byNeed_Str;
+		pItemData->byNeed_Sol;
+		pItemData->byNeed_Foc;
+		pItemData->byNeed_Eng;
+		pItemData->byNeed_Con;
+		pItemData->byNeed_Dex;
+		pItemData->byBattle_Attribute;
+		printf("Item: %d have attribute:\n", app->db->getInt("tblidx"));
+		printf("%d, %d, %d, %d, %d, %d %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",pItemData->wPhysical_Offence ,pItemData->wPhysical_Defence ,pItemData->wEnergy_Offence ,pItemData->wEnergy_Defence ,pItemData->wAttack_Speed_Rate,
+			pItemData->fAttack_Range_Bonus,pItemData->dwPhysical_OffenceUpgrade ,pItemData->dwPhysical_DefenceUpgrade ,pItemData->dwEnergy_OffenceUpgrade ,pItemData->dwEnergy_DefenceUpgrade ,pItemData->byNeed_Str,
+			pItemData->byNeed_Sol,pItemData->byNeed_Foc ,pItemData->byNeed_Eng ,pItemData->byNeed_Con ,pItemData->byNeed_Dex,pItemData->byBattle_Attribute );
+	}
+}
