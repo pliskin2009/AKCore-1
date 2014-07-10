@@ -259,6 +259,7 @@ int CClientSession::OnDispatch(CNtlPacket * pPacket)
 		case UG_CHAR_SKILL_REQ:
 		{
 			printf("--- UG_CHAR_SKILL_REQ --- \n");
+			CClientSession::SendCharSkillRes(pPacket, app);
 		}
 			break;
 		case UG_SKILL_TARGET_LIST:
