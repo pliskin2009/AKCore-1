@@ -224,32 +224,42 @@ void		PlayerInfos::SaveMe()
 
 void		PlayerInfos::setZero()
 {
-	
-}
+	this->pcProfile->avatarAttribute.wLastPhysicalOffence = this->pcProfile->avatarAttribute.wBasePhysicalOffence;
+	this->pcProfile->avatarAttribute.wLastPhysicalDefence = this->pcProfile->avatarAttribute.wBasePhysicalDefence;
+	this->pcProfile->avatarAttribute.wLastEnergyOffence = this->pcProfile->avatarAttribute.wBaseEnergyOffence;
+	this->pcProfile->avatarAttribute.wLastEnergyDefence = this->pcProfile->avatarAttribute.wBaseEnergyDefence;
+	this->pcProfile->avatarAttribute.wLastAttackSpeedRate = this->pcProfile->avatarAttribute.wBaseAttackSpeedRate;
+	this->pcProfile->avatarAttribute.fLastAttackRange = this->pcProfile->avatarAttribute.fBaseAttackRange;
 
+	this->pcProfile->avatarAttribute.byLastCon = this->pcProfile->avatarAttribute.byBaseCon;
+	this->pcProfile->avatarAttribute.byLastDex = this->pcProfile->avatarAttribute.byBaseDex;
+	this->pcProfile->avatarAttribute.byLastEng = this->pcProfile->avatarAttribute.byBaseEng;
+	this->pcProfile->avatarAttribute.byLastFoc = this->pcProfile->avatarAttribute.byBaseFoc;
+	this->pcProfile->avatarAttribute.byLastSol = this->pcProfile->avatarAttribute.byBaseSol;
+	this->pcProfile->avatarAttribute.byLastStr = this->pcProfile->avatarAttribute.byBaseStr;
+}
 void		PlayerInfos::calculeMyStat(CGameServer * app)
 {
 	app->db->prepare("SELECT * FROM items WHERE owner_ID = ? AND place=7 ORDER BY pos ASC");
 	app->db->setInt(1, this->pcProfile->charId);
 	app->db->execute();
-
+	this->setZero();
 	CItemTable *itemTbl = app->g_pTableContainer->GetItemTable();
-
 	while (app->db->fetch())
 	{
 		sITEM_TBLDAT* pItemData = (sITEM_TBLDAT*) itemTbl->FindData(app->db->getInt("tblidx"));
-		/*if (pItemData->wPhysical_Offence < 65535 && pItemData->wPhysical_Offence > 0)
-			this->LastPhysicalOffence += pItemData->wPhysical_Offence;
+		if (pItemData->wPhysical_Offence < 65535 && pItemData->wPhysical_Offence > 0)
+			this->pcProfile->avatarAttribute.wLastPhysicalOffence += pItemData->wPhysical_Offence;
 		if (pItemData->wPhysical_Defence < 65535 && pItemData->wPhysical_Defence > 0)
-			this->LastPhysicalDefence += pItemData->wPhysical_Defence;
+			this->pcProfile->avatarAttribute.wLastPhysicalDefence += pItemData->wPhysical_Defence;
 		if (pItemData->wEnergy_Offence < 65535 && pItemData->wEnergy_Offence > 0)
-			this->LastEnergyOffence += pItemData->wEnergy_Offence;
+			this->pcProfile->avatarAttribute.wLastEnergyOffence += pItemData->wEnergy_Offence;
 		if (pItemData->wEnergy_Defence < 65535 && pItemData->wEnergy_Defence > 0)
-			this->LastEnergyDefence += pItemData->wEnergy_Defence;
+			this->pcProfile->avatarAttribute.wLastEnergyDefence += pItemData->wEnergy_Defence;
 		if (pItemData->wAttack_Speed_Rate < 65535 && pItemData->wAttack_Speed_Rate > 0)
-			this->LastAttackSpeedRate += pItemData->wAttack_Speed_Rate;
+			this->pcProfile->avatarAttribute.wLastAttackSpeedRate += pItemData->wAttack_Speed_Rate;
 		if (pItemData->fAttack_Range_Bonus < 65535 && pItemData->fAttack_Range_Bonus > 0)
-			this->LastAttackRange += pItemData->fAttack_Range_Bonus;*/
+			this->pcProfile->avatarAttribute.fLastAttackRange += pItemData->fAttack_Range_Bonus;
 		pItemData->dwPhysical_OffenceUpgrade;
 		pItemData->dwPhysical_DefenceUpgrade;
 		pItemData->dwEnergy_OffenceUpgrade;
@@ -261,10 +271,30 @@ void		PlayerInfos::calculeMyStat(CGameServer * app)
 		pItemData->byNeed_Con;
 		pItemData->byNeed_Dex;
 		pItemData->byBattle_Attribute;
-		/*printf("Item: %d have attribute:\n", app->db->getInt("tblidx"));
-		printf("%d, %d, %d, %d, %d, %d %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d\n",pItemData->wPhysical_Offence ,pItemData->wPhysical_Defence ,pItemData->wEnergy_Offence ,pItemData->wEnergy_Defence ,pItemData->wAttack_Speed_Rate,
-			pItemData->fAttack_Range_Bonus,pItemData->dwPhysical_OffenceUpgrade ,pItemData->dwPhysical_DefenceUpgrade ,pItemData->dwEnergy_OffenceUpgrade ,pItemData->dwEnergy_DefenceUpgrade ,pItemData->byNeed_Str,
-			pItemData->byNeed_Sol,pItemData->byNeed_Foc ,pItemData->byNeed_Eng ,pItemData->byNeed_Con ,pItemData->byNeed_Dex,pItemData->byBattle_Attribute );*/
-		//printf("%d, %d, %d, %d, %d, %d\n",this->LastPhysicalOffence ,this->LastPhysicalDefence ,this->LastEnergyOffence ,this->LastEnergyDefence ,this->LastAttackSpeedRate ,this->LastAttackRange );
+		//printf("%d, %d, %d, %d, %d, %d\n", pItemData->dwPhysical_OffenceUpgrade, pItemData->dwPhysical_DefenceUpgrade, pItemData->dwEnergy_OffenceUpgrade, pItemData->dwEnergy_DefenceUpgrade, pItemData->byNeed_Con, pItemData->byNeed_Dex);
 	}
+	app->db->prepare("UPDATE characters SET LastAttackSpeedRate = ?, LastEnergyDefence = ?, LastEnergyOffence = ?,LastPhysicalDefence = ?, LastPhysicalOffence = ? WHERE CharID = ?");
+	app->db->setInt(1, this->pcProfile->avatarAttribute.wLastAttackSpeedRate);
+	app->db->setInt(2, this->pcProfile->avatarAttribute.wLastEnergyDefence);
+	app->db->setInt(3,this->pcProfile->avatarAttribute.wLastEnergyOffence);
+	app->db->setInt(4, this->pcProfile->avatarAttribute.wLastPhysicalDefence);
+	app->db->setInt(5, this->pcProfile->avatarAttribute.wLastPhysicalOffence);
+	app->db->setInt(6,  this->pcProfile->charId);
+	app->db->execute();
+	app->db->prepare("UPDATE characters SET LastStr = ?, LastCon = ?, LastFoc = ?, LastDex = ?,LastSol = ?, LastEng = ? WHERE CharID = ?");
+	app->db->setInt(1, this->pcProfile->avatarAttribute.byLastStr);
+	app->db->setInt(2, this->pcProfile->avatarAttribute.byLastCon);
+	app->db->setInt(3, this->pcProfile->avatarAttribute.byLastFoc);
+	app->db->setInt(4, this->pcProfile->avatarAttribute.byLastDex);
+	app->db->setInt(5, this->pcProfile->avatarAttribute.byLastSol);
+	app->db->setInt(6, this->pcProfile->avatarAttribute.byLastEng);
+	app->db->setInt(7,  this->pcProfile->charId);
+	app->db->execute();
+
+
+
+	app->db->prepare("SELECT * FROM characters WHERE CharID = ?");
+	app->db->setInt(1, this->pcProfile->charId);
+	app->db->execute();
+	app->db->fetch();
 }

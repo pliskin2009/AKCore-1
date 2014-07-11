@@ -14,13 +14,18 @@ public:
 	PlayerInfos()
 	{
 		this->pcProfile = new sPC_PROFILE;
+		this->sCharState = new sCHARSTATE;
 	};
 	~PlayerInfos(){};
-	sPC_PROFILE		*  pcProfile;
-	void		setPlayerStat(sPC_PROFILE* pc)
+	sPC_PROFILE		*pcProfile;
+	sCHARSTATE		*sCharState;
+	HSESSION		MySession;
+	void		setPlayerStat(sPC_PROFILE* pc, sCHARSTATE *sCharSt)
 	{	
 		memcpy(this->pcProfile, pc, sizeof(sPC_PROFILE));
+		memcpy(this->sCharState, sCharSt, sizeof(sCHARSTATE));
 	};
+	void		StoreSession(HSESSION ss){this->MySession = ss;};
 	void		ClearTheList();
 	sVECTOR3	GetPosition();
 	sVECTOR3	GetDirection();
@@ -43,7 +48,7 @@ public:
 	// PLAYER STAT CALCULE
 	void		calculeMyStat(CGameServer * app);
 	void		setZero();
-
+	void		StoreHandle(RwUInt32 _avatarHandle){this->avatarHandle = _avatarHandle;};
 private:
 	MySQLConnWrapper			*db;
 public:
@@ -60,4 +65,5 @@ private:
 	std::string			username;
 	RwUInt32			mob_SpawnTime;
 	sVECTOR3			last_SpawnPos;
+	RwUInt32			avatarHandle;
 };

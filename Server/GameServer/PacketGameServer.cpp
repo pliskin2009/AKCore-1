@@ -39,9 +39,35 @@ void CClientSession::SendGameEnterReq(CNtlPacket * pPacket, CGameServer * app)
 //--------------------------------------------------------------------------------------//
 //		Send avatar char info
 //--------------------------------------------------------------------------------------//
+void CClientSession::CheckPlayerStat(CGameServer * app, sPC_TBLDAT *pTblData)
+{
+
+	app->db->prepare("UPDATE characters SET BaseStr = ?, BaseCon = ?, BaseFoc = ?, BaseDex = ?,BaseSol = ?, BaseEng = ? WHERE CharID = ?");
+	app->db->setInt(1, pTblData->byStr);
+	app->db->setInt(2, pTblData->byCon);
+	app->db->setInt(3, pTblData->byFoc);
+	app->db->setInt(4, pTblData->byDex);
+	app->db->setInt(5, pTblData->bySol);
+	app->db->setInt(6, pTblData->byEng);
+	app->db->setInt(7,  this->plr->pcProfile->charId);
+	app->db->execute();
+
+	app->db->prepare("UPDATE characters SET BaseAttackRate = ?, BaseAttackSpeedRate = ?, BaseEnergyDefence = ?, BaseEnergyOffence = ?,BasePhysicalDefence = ?, BasePhysicalOffence = ? WHERE CharID = ?");
+	app->db->setInt(1, pTblData->wAttack_Rate);
+	app->db->setInt(2, pTblData->wAttack_Speed_Rate);
+	app->db->setInt(3, pTblData->wBasic_Energy_Defence);
+	app->db->setInt(4, pTblData->wBasic_Energy_Offence);
+	app->db->setInt(5, pTblData->wBasic_Physical_Defence);
+	app->db->setInt(6, pTblData->wBasic_Physical_Offence);
+	app->db->setInt(7,  this->plr->pcProfile->charId);
+	app->db->execute();
+}
 void CClientSession::SendAvatarCharInfo(CNtlPacket * pPacket, CGameServer * app)
 {
 	avatarHandle = AcquireSerialId();
+
+	this->plr->StoreHandle(avatarHandle);
+	this->plr->StoreSession(this->GetHandle());
 
 	printf("--- LOAD CHARACTER INFO FOR GAMESERVER --- \n");
 	CNtlPacket packet(sizeof(sGU_AVATAR_CHAR_INFO));
@@ -59,7 +85,13 @@ void CClientSession::SendAvatarCharInfo(CNtlPacket * pPacket, CGameServer * app)
 
 	CPCTable *pPcTable = app->g_pTableContainer->GetPcTable();
 	sPC_TBLDAT *pTblData = (sPC_TBLDAT*)pPcTable->GetPcTbldat(app->db->getInt("Race"),app->db->getInt("Class"),app->db->getInt("Gender"));
+	CClientSession::CheckPlayerStat(app, pTblData);
 	
+	app->db->prepare("SELECT * FROM characters WHERE CharID = ?");
+	app->db->setInt(1,  this->plr->pcProfile->charId);
+	app->db->execute();
+	app->db->fetch();
+
 	res->wOpCode = GU_AVATAR_CHAR_INFO;
 	res->handle = avatarHandle;
 	res->sPcProfile.tblidx = pTblData->tblidx;
@@ -73,17 +105,11 @@ void CClientSession::SendAvatarCharInfo(CNtlPacket * pPacket, CGameServer * app)
 	res->sPcProfile.sPcShape.bySkinColor = app->db->getInt("SkinColor");
 	//Character Attribute
 	res->sPcProfile.avatarAttribute.byBaseStr = app->db->getInt("BaseStr");
-	res->sPcProfile.avatarAttribute.byLastStr = app->db->getInt("LastStr");
 	res->sPcProfile.avatarAttribute.byBaseCon = app->db->getInt("BaseCon");
-	res->sPcProfile.avatarAttribute.byLastCon = app->db->getInt("LastCon");
 	res->sPcProfile.avatarAttribute.byBaseFoc = app->db->getInt("BaseFoc");
-	res->sPcProfile.avatarAttribute.byLastFoc = app->db->getInt("LastFoc");
 	res->sPcProfile.avatarAttribute.byBaseDex = app->db->getInt("BaseDex");
-	res->sPcProfile.avatarAttribute.byLastDex = app->db->getInt("LastDex");
 	res->sPcProfile.avatarAttribute.byBaseSol = app->db->getInt("BaseSol");
-	res->sPcProfile.avatarAttribute.byLastSol = app->db->getInt("LastSol");
 	res->sPcProfile.avatarAttribute.byBaseEng = app->db->getInt("BaseEng");
-	res->sPcProfile.avatarAttribute.byLastEng = app->db->getInt("LastEng");
 	res->sPcProfile.avatarAttribute.wBaseMaxLP = app->db->getInt("BaseMaxLP");
 	res->sPcProfile.avatarAttribute.wLastMaxLP = app->db->getInt("BaseMaxLP");
 	res->sPcProfile.avatarAttribute.wBaseMaxEP = app->db->getInt("BaseMaxEP");
@@ -91,22 +117,13 @@ void CClientSession::SendAvatarCharInfo(CNtlPacket * pPacket, CGameServer * app)
 	res->sPcProfile.avatarAttribute.wBaseMaxRP = app->db->getInt("BaseMaxRP");
 	res->sPcProfile.avatarAttribute.wLastMaxRP = app->db->getInt("BaseMaxRP");
 	res->sPcProfile.avatarAttribute.wBasePhysicalOffence = app->db->getInt("BasePhysicalOffence");
-	res->sPcProfile.avatarAttribute.wLastPhysicalOffence = app->db->getInt("LastPhysicalOffence");
 	res->sPcProfile.avatarAttribute.wBasePhysicalDefence = app->db->getInt("BasePhysicalDefence");
-	res->sPcProfile.avatarAttribute.wLastPhysicalDefence = app->db->getInt("LastPhysicalDefence");
 	res->sPcProfile.avatarAttribute.wBaseEnergyOffence = app->db->getInt("BaseEnergyOffence");
-	res->sPcProfile.avatarAttribute.wLastEnergyOffence = app->db->getInt("LastEnergyOffence");
 	res->sPcProfile.avatarAttribute.wBaseEnergyDefence = app->db->getInt("BaseEnergyDefence");
-	res->sPcProfile.avatarAttribute.wLastEnergyDefence = app->db->getInt("LastEnergyDefence");
 	res->sPcProfile.avatarAttribute.wBaseAttackRate = app->db->getInt("BaseAttackRate");
-	res->sPcProfile.avatarAttribute.wLastAttackRate = app->db->getInt("LastAttackRate");
 	res->sPcProfile.avatarAttribute.wBaseDodgeRate = app->db->getInt("BaseDodgeRate");
-	res->sPcProfile.avatarAttribute.wLastDodgeRate = app->db->getInt("LastDodgeRate");
 	res->sPcProfile.avatarAttribute.wBaseBlockRate = app->db->getInt("BaseBlockRate");
-	res->sPcProfile.avatarAttribute.wLastBlockRate = app->db->getInt("LastBlockRate");
-	res->sPcProfile.avatarAttribute.wLastPhysicalCriticalRate = app->db->getInt("LastPhysicalCriticalRate");
-	res->sPcProfile.avatarAttribute.wLastEnergyCriticalRate = app->db->getInt("LastEnergyCriticalRate");
-	res->sPcProfile.avatarAttribute.fLastRunSpeed = (float)app->db->getDouble("LastRunSpeed");
+	
 	res->sPcProfile.wCurLP = app->db->getInt("CurLP");
 	res->sPcProfile.wCurEP = app->db->getInt("CurEP");
 	res->sPcProfile.wCurRP = app->db->getInt("CurRP");
@@ -134,13 +151,28 @@ void CClientSession::SendAvatarCharInfo(CNtlPacket * pPacket, CGameServer * app)
 	res->sCharState.sCharStateBase.aspectState.sAspectStateDetail.sSuperSaiyan.bySourceGrade = 0;
 	res->sCharState.sCharStateBase.aspectState.sAspectStateDetail.sVehicle.idVehicleTblidx = 0;
 	res->wCharStateSize = sizeof(sCHARSTATE_BASE);
-
 	res->sPcProfile.bIsGameMaster = app->db->getBoolean("GameMaster");
 	this->plr->SetPlayerName(app->db->getString("CharName"));
 	this->plr->SetPosition(res->sCharState.sCharStateBase.vCurLoc, res->sCharState.sCharStateBase.vCurDir);
-
-	this->plr->setPlayerStat(&res->sPcProfile);
+	this->plr->setPlayerStat(&res->sPcProfile, &res->sCharState);
 	this->plr->calculeMyStat(app);
+	res->sPcProfile.avatarAttribute.byLastCon = app->db->getInt("LastCon");
+	res->sPcProfile.avatarAttribute.byLastStr = app->db->getInt("LastStr");
+	res->sPcProfile.avatarAttribute.byLastFoc = app->db->getInt("LastFoc");
+	res->sPcProfile.avatarAttribute.byLastDex = app->db->getInt("LastDex");
+	res->sPcProfile.avatarAttribute.byLastSol = app->db->getInt("LastSol");
+	res->sPcProfile.avatarAttribute.byLastEng = app->db->getInt("LastEng");
+	res->sPcProfile.avatarAttribute.wLastPhysicalOffence = app->db->getInt("LastPhysicalOffence");
+	res->sPcProfile.avatarAttribute.wLastPhysicalDefence = app->db->getInt("LastPhysicalDefence");
+	res->sPcProfile.avatarAttribute.wLastEnergyOffence = app->db->getInt("LastEnergyOffence");
+	res->sPcProfile.avatarAttribute.wLastEnergyDefence = app->db->getInt("LastEnergyDefence");
+	res->sPcProfile.avatarAttribute.wLastAttackRate = app->db->getInt("LastAttackRate");
+	res->sPcProfile.avatarAttribute.wLastDodgeRate = app->db->getInt("LastDodgeRate");
+	res->sPcProfile.avatarAttribute.wLastBlockRate = app->db->getInt("LastBlockRate");
+	res->sPcProfile.avatarAttribute.wLastPhysicalCriticalRate = app->db->getInt("LastPhysicalCriticalRate");
+	res->sPcProfile.avatarAttribute.wLastEnergyCriticalRate = app->db->getInt("LastEnergyCriticalRate");
+	res->sPcProfile.avatarAttribute.fLastRunSpeed = (float)app->db->getDouble("LastRunSpeed");
+	this->plr->setPlayerStat(&res->sPcProfile, &res->sCharState);
 	packet.SetPacketLen( sizeof(sGU_AVATAR_CHAR_INFO) );
 	int rc = g_pApp->Send( this->GetHandle(), &packet );
 }
@@ -2496,7 +2528,7 @@ void	CClientSession::SendShopSellReq(CNtlPacket * pPacket, CGameServer * app)
 	app->db->setInt(1, this->plr->pcProfile->charId);
 	app->db->execute();
 	app->db->fetch();
-	int zeni_plr = zeni_plr = app->db->getInt("money");
+	int zeni_plr = app->db->getInt("money");
 
 	app->db->prepare("UPDATE characters SET money=? WHERE CharID=?");
 	app->db->setInt(1, zeni_plr + zenit_amount);
